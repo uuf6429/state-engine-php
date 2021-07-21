@@ -1,6 +1,11 @@
 {
     "name": "uuf6429/state-engine",
     "type": "library",
+    "homepage": "https://github.com/uuf6429/state-engine-php",
+    "readme": "README.md",
+    "license": "MIT",
+    "description": "A library providing interfaces and basic implementation of a State Engine",
+    "keywords": ["state", "engine", "state-engine", "uuf6429"],
     "authors": [
         {
             "name": "Christian Sciberras",

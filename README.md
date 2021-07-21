@@ -1,9 +1,10 @@
 # State Engine (PHP)
 
-[![CI](https://github.com/uuf6429/state-engine-php/workflows/CI/badge.svg)](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml)
+[![CI](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml/badge.svg)](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.4%20%7C%20%5E8-8892BF.svg)](https://php.net/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/uuf6429/state-engine-php/main/LICENSE)
-[![Packagist](https://img.shields.io/packagist/v/uuf6429/state-engine.svg)](https://packagist.org/packages/uuf6429/state-engine)
+[![License](http://poser.pugx.org/uuf6429/state-engine/license)](https://packagist.org/packages/uuf6429/state-engine)
+[![Latest Stable Version](http://poser.pugx.org/uuf6429/state-engine/v)](https://packagist.org/packages/uuf6429/state-engine)
+[![Latest Unstable Version](http://poser.pugx.org/uuf6429/state-engine/v/unstable)](https://packagist.org/packages/uuf6429/state-engine)
 
 This library provides some interfaces and a basic implementation of a State Engine.
 
