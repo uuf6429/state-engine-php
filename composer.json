@@ -1,6 +1,9 @@
 {
     "name": "uuf6429/state-engine",
     "type": "library",
+    "homepage": "https://github.com/uuf6429/state-engine-php",
+    "readme": "README.md",
+    "license": "MIT",
     "authors": [
         {
             "name": "Christian Sciberras",
