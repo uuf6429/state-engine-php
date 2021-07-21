@@ -1,25 +1,17 @@
 # State Engine (PHP)
 
+[![CI](https://github.com/uuf6429/state-engine-php/workflows/CI/badge.svg)](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.4%20%7C%20%5E8-8892BF.svg)](https://php.net/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/uuf6429/state-engine-php/main/LICENSE)
+[![Packagist](https://img.shields.io/packagist/v/uuf6429/state-engine.svg)](https://packagist.org/packages/uuf6429/state-engine)
+
 This library provides some interfaces and a basic implementation of a State Engine.
 
 **Highlights:**
 - Highly composable - everything can be replaced as desired
-- PSR-14 (Event Dispatcher) compatible
+- [PSR-14](http://www.php-fig.org/psr/psr-14/) (Event Dispatcher) compatible
 - Fluent interface
 - Generates PlantUML markup
-
-## Table Of Contents
-
-- [State Engine (PHP)](#state-engine-php)
-  - [Table Of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Why?](#why)
-  - [How?](#how)
-  - [Usage](#usage)
-    - [From Scratch](#from-scratch)
-    - [From Scratch (Custom)](#from-scratch-custom)
-    - [Existing Code](#existing-code)
-  - [Examples & Testing](#examples--testing)
 
 ## Installation
 
@@ -60,7 +52,7 @@ Usage depends on if you want to do it from scratch or plug it into your existing
 
 Here's a quick & dirty example with the provided implementation (that assumes that there is a "door" model):
 
-```injectablephp
+```php
 use App\Models\Door;  // example model
 
 use uuf6429\StateEngine\Implementation\Builder;
@@ -101,7 +93,7 @@ For example, you could store states or transitions in a database, in which case 
 The library provides some flexibility so that you can connect your existing code with it. In more complicated scenarios,
 you may have to build a small layer to bridge the gap. The example below illustrates how one can handle models with
 flags instead of a single state.
-```injectablephp
+```php
 use App\Models\Door;  // example model
 
 use uuf6429\StateEngine\Implementation\Builder;
