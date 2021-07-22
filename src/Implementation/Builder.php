@@ -20,12 +20,12 @@ class Builder
     /**
      * @var array<string, StateInterface>
      */
-    private array $states = [];
+    protected array $states = [];
 
     /**
      * @var array<string, TransitionInterface>
      */
-    private array $transitions = [];
+    protected array $transitions = [];
 
     private function __construct()
     {
