@@ -11,23 +11,23 @@ This library provides some interfaces and a basic implementation of a State Engi
 **Highlights:**
 - Highly composable - everything can be replaced as desired
 - [PSR-14](http://www.php-fig.org/psr/psr-14/) (Event Dispatcher) compatible
-- Fluent interface
-- Generates PlantUML markup
+- Fluent builder interface ([see "From Scratch"](#from-scratch))
+- Generates PlantUML markup ([see "Examples & Testing"](#examples--testing))
 
 ## Installation
 
 The recommended and easiest way to install this library is through [Composer](https://getcomposer.org/):
 
 ```bash
-composer require uuf6429/state-engine-php "~2.0"
+composer require uuf6429/state-engine-php "^1.0"
 ```
 
 ## Why?
 
 In principle such an engine is easy to implement, but in practice it is typically implemented badly or forgotten.
 
-For instance, one might have an `is_active` field thinking there will not be other states and then later on realizes the
-need for an `is_pending` field, at which point refactoring flags to state is too late.
+For instance, one might have an `is_active` field thinking there will not be other states and then later on an
+`is_pending` field is needed, at which point refactoring flags to state is too late.
 
 In any case, this library abstracts away that situation or at least decreases the amount of code.
 
@@ -47,7 +47,13 @@ There are a few key parts to how this works:
 
 ## Usage
 
-Usage depends on if you want to do it from scratch or plug it into your existing code.
+You have the possibility to use it from scratch or plug it into your existing. There are basically three parts to it:
+1. configuring the engine (creating states and transitions)
+2. using the engine (eg, in a web controller or service)
+3. (optionally) handling events (with the same event dispatcher provided to the engine)
+
+A slightly different situation would be when you need to provide a list of valid transitions, for example to the user.
+In this case, having the [`StateTraversion`](https://github.com/uuf6429/state-engine-php/blob/main/src/Implementation/Traits/StateTraversion.php) trait on the repository would be useful.
 
 ### From Scratch
 
@@ -123,8 +129,8 @@ $doorStateMutator = Builder::stateMutator(
 
 ## Examples & Testing
 
-The JiraIssueTest class serves as a test as well as a realistic example of how Jira Issue states could be set up.
+The [`JiraIssueTest`](https://github.com/uuf6429/state-engine-php/blob/main/test/JiraIssueTest.php) class serves as a test as well as a realistic example of how Jira Issue states could be set up.
 
-The test also generates the Plant UML diagram below (embedded as an image due to GFM limitations).
+The test also generates the PlantUML diagram below (embedded as an image due to GFM limitations):
 
 ![example](https://www.planttext.com/api/plantuml/svg/TPBDRiCW48JlFCKUauDV88SgZgfAlLIrymGqJ2rK31PiBENjYurfux_hpZVB370EB3tVMoF4uI9lFyOrHogA5pgKLff7qE589xgWqPRaD5cIxvPUqG_ScmnSi8ygVJjF2ZsCwrfO5a_xHbCDgHuZDNcpJZVNTWQCbUNlr1FLuBktn8w-qb0i5wuwV02AMkSHOx7K9cnR_ikaqhCEMLmqgCg1lyAg8L5Lxe8r36J0nbNvfEmwfqnNTjqyqZn5hf0IfGQCmDes8i-tDrTbZAGDr1xtb3sodpA4WTtG9rzmfeTAZpKg8vsdwmTr7QmGvtY9yJV-0W00)
