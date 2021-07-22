@@ -9,9 +9,11 @@ use uuf6429\StateEngine\Exceptions\BuilderTransitionAlreadyDeclaredException;
 use uuf6429\StateEngine\Implementation\Entities\State;
 use uuf6429\StateEngine\Implementation\Entities\Transition;
 use uuf6429\StateEngine\Implementation\Repositories\ArrayRepository;
+use uuf6429\StateEngine\Interfaces\EngineInterface;
 use uuf6429\StateEngine\Interfaces\StateAwareInterface;
 use uuf6429\StateEngine\Interfaces\StateInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
+use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 
 class Builder
 {
@@ -94,12 +96,19 @@ class Builder
         return $this;
     }
 
-    public function getRepository(): ArrayRepository
+    /**
+     * @return ArrayRepository
+     */
+    public function getRepository(): TransitionRepositoryInterface
     {
         return new ArrayRepository(array_values($this->transitions));
     }
 
-    public function getEngine(?EventDispatcherInterface $eventDispatcher = null): Engine
+    /**
+     * @param EventDispatcherInterface|null $eventDispatcher
+     * @return Engine
+     */
+    public function getEngine(?EventDispatcherInterface $eventDispatcher = null): EngineInterface
     {
         return new Engine($this->getRepository(), $eventDispatcher);
     }

@@ -8,6 +8,7 @@ use uuf6429\StateEngine\Implementation\Engine;
 use uuf6429\StateEngine\Implementation\Entities\State;
 use uuf6429\StateEngine\Interfaces\EngineInterface;
 use uuf6429\StateEngine\Interfaces\StateAwareInterface;
+use uuf6429\StateEngine\Interfaces\StateInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 
@@ -85,7 +86,7 @@ class JiraIssueTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
 
-        $item = new TestStateAwareItem(new State('in-dev'));
+        $item = $this->buildStatefulItem(new State('in-dev'));
         $this->engine->changeState($item, new State('ready-for-qa'));
     }
 
@@ -93,7 +94,7 @@ class JiraIssueTest extends TestCase
     {
         $this->expectExceptionMessage('Cannot change state from in-dev to in-qa; no such transition was defined.');
 
-        $item = new TestStateAwareItem(new State('in-dev'));
+        $item = $this->buildStatefulItem(new State('in-dev'));
         $this->engine->changeState($item, new State('in-qa'));
     }
 
@@ -141,5 +142,27 @@ class JiraIssueTest extends TestCase
             ->with($newState);
 
         $this->engine->changeState($mock, $newState);
+    }
+
+    private function buildStatefulItem(State $initialState): StateAwareInterface
+    {
+        return new class($initialState) implements StateAwareInterface {
+            private StateInterface $state;
+
+            public function __construct(StateInterface $initialState)
+            {
+                $this->state = $initialState;
+            }
+
+            public function getState(): StateInterface
+            {
+                return $this->state;
+            }
+
+            public function setState(StateInterface $newState): void
+            {
+                $this->state = $newState;
+            }
+        };
     }
 }
