@@ -80,7 +80,7 @@ class Builder
             throw new BuilderStateNotDeclaredException($newStateName);
         }
 
-        $transitionName = "$oldStateName -> $newStateName";
+        $transitionName = "($oldStateName) -> ($newStateName)";
         if (isset($this->transitions[$transitionName])) {
             throw new BuilderTransitionAlreadyDeclaredException($oldStateName, $newStateName);
         }
