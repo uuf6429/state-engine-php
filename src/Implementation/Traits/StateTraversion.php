@@ -16,7 +16,7 @@ trait StateTraversion
     {
         /** @var $this TransitionRepositoryInterface */
         return array_values(array_filter(
-            $this->all(),
+            iterator_to_array($this->all()),
             static function (TransitionInterface $transition) use ($state): bool {
                 return $transition->getOldState()->equals($state);
             }
@@ -27,7 +27,7 @@ trait StateTraversion
     {
         /** @var $this TransitionRepositoryInterface */
         return array_values(array_filter(
-            $this->all(),
+            iterator_to_array($this->all()),
             static function (TransitionInterface $transition) use ($state): bool {
                 return $transition->getNewState()->equals($state);
             }

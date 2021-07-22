@@ -17,7 +17,7 @@ interface TransitionRepositoryInterface
     /**
      * Returns an array or Traversable object of all transitions.
      *
-     * @return array|Traversable|TransitionInterface[]
+     * @return Traversable|TransitionInterface[]
      */
-    public function all();
+    public function all(): Traversable;
 }
