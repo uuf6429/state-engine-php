@@ -26,7 +26,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "uuf6429\\StateEngine\\": "test/"
+            "uuf6429\\StateEngine\\": "tests/"
         }
     }
 }

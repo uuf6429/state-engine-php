@@ -8,16 +8,16 @@ use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 /**
  * @mixin TransitionRepositoryInterface
  */
-trait HasTransition
+trait FindsTransition
 {
-    public function has(TransitionInterface $transition): bool
+    public function find(TransitionInterface $search): ?TransitionInterface
     {
-        foreach ($this->all() as $testTransition) {
-            if ($transition->equals($testTransition)) {
-                return true;
+        foreach ($this->all() as $match) {
+            if ($search->equals($match)) {
+                return $match;
             }
         }
 
-        return false;
+        return null;
     }
 }

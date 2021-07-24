@@ -5,17 +5,17 @@ namespace uuf6429\StateEngine;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use uuf6429\StateEngine\Implementation\Builder;
-use uuf6429\StateEngine\Implementation\Engine;
 use uuf6429\StateEngine\Implementation\Entities\State;
 use uuf6429\StateEngine\Implementation\Events\StateChanged;
 use uuf6429\StateEngine\Implementation\Events\StateChanging;
+use uuf6429\StateEngine\Interfaces\EngineInterface;
 use uuf6429\StateEngine\Interfaces\StateAwareInterface;
 use uuf6429\StateEngine\Interfaces\StateInterface;
 
 class EventTest extends TestCase
 {
     private EventDispatcherInterface $dispatcher;
-    private Engine $engine;
+    private EngineInterface $engine;
 
     protected function setUp(): void
     {
@@ -26,9 +26,9 @@ class EventTest extends TestCase
             ->getMock();
 
         $this->engine = Builder::create()
-            ->addState('started')
-            ->addState('finished')
-            ->addTransition('started', 'finished')
+            ->defState('started')
+            ->defState('finished')
+            ->defTransition('started', 'finished')
             ->getEngine($this->dispatcher);
     }
 
@@ -60,7 +60,7 @@ class EventTest extends TestCase
         $statefulItem->state = $startedState;
         $this->engine->changeState($statefulItem, $finishedState);
 
-        $this->assertSame($finishedState, $statefulItem->state);
+        $this->assertEquals($finishedState, $statefulItem->state);
         $this->assertEquals(
             [
                 new StateChanging($statefulItem, $finishedState),

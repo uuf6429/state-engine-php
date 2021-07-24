@@ -37,7 +37,16 @@ class Transition implements TransitionInterface, DescribableInterface
     public function equals($other): bool
     {
         return $other instanceof TransitionInterface
-            && $this->getOldState()->equals($other->getOldState())
-            && $this->getNewState()->equals($other->getNewState());
+            && $this->getId() === $other->getId();
+    }
+
+    public function getId(): string
+    {
+        return "({$this->oldState->getId()}) -> ({$this->newState->getId()})";
+    }
+
+    public function __toString(): string
+    {
+        return "{$this->oldState->getId()} -> {$this->newState->getId()}";
     }
 }
