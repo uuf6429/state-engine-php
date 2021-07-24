@@ -7,12 +7,12 @@ use Traversable;
 interface TransitionRepositoryInterface
 {
     /**
-     * Returns true if the specified transition exists in the repository.
+     * Returns the stored transition matching the $search transition (or null if none found).
      *
-     * @param TransitionInterface $transition
-     * @return bool
+     * @param TransitionInterface $search
+     * @return null|TransitionInterface
      */
-    public function has(TransitionInterface $transition): bool;
+    public function find(TransitionInterface $search): ?TransitionInterface;
 
     /**
      * Returns an array or Traversable object of all transitions.

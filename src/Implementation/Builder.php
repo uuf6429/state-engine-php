@@ -8,6 +8,7 @@ use uuf6429\StateEngine\Exceptions\BuilderStateNotDeclaredException;
 use uuf6429\StateEngine\Exceptions\BuilderTransitionAlreadyDeclaredException;
 use uuf6429\StateEngine\Implementation\Entities\State;
 use uuf6429\StateEngine\Implementation\Entities\Transition;
+use uuf6429\StateEngine\Implementation\Entities\TransitionWithData;
 use uuf6429\StateEngine\Implementation\Repositories\ArrayRepository;
 use uuf6429\StateEngine\Interfaces\EngineInterface;
 use uuf6429\StateEngine\Interfaces\StateAwareInterface;
@@ -37,7 +38,7 @@ class Builder
         return new static();
     }
 
-    public static function stateMutator(callable $getter, callable $setter): StateAwareInterface
+    public static function makeStateMutator(callable $getter, callable $setter): StateAwareInterface
     {
         return new class ($getter, $setter) implements StateAwareInterface {
             private $getter;
@@ -61,39 +62,64 @@ class Builder
         };
     }
 
-    public function addState(string $name, ?string $description = null): self
+    public function addState(StateInterface $state): self
     {
-        if (isset($this->states[$name])) {
-            throw new BuilderStateAlreadyDeclaredException($name);
+        $stateId = $state->getId();
+        if (isset($this->states[$stateId])) {
+            throw new BuilderStateAlreadyDeclaredException($state);
         }
 
-        $this->states[$name] = new State($name, $description);
+        $this->states[$stateId] = $state;
 
         return $this;
     }
 
-    public function addTransition(string $oldStateName, string $newStateName, ?string $description = null): self
+    public function defState(string $name, ?string $description = null): self
     {
-        if (!isset($this->states[$oldStateName])) {
-            throw new BuilderStateNotDeclaredException($oldStateName);
+        return $this->addState(new State($name, $description));
+    }
+
+    public function addTransition(TransitionInterface $transition): self
+    {
+        if (!isset($this->states[$transition->getOldState()->getId()])) {
+            throw new BuilderStateNotDeclaredException($transition->getOldState());
         }
 
-        if (!isset($this->states[$newStateName])) {
-            throw new BuilderStateNotDeclaredException($newStateName);
+        if (!isset($this->states[$transition->getNewState()->getId()])) {
+            throw new BuilderStateNotDeclaredException($transition->getNewState());
         }
 
-        $transitionName = "($oldStateName) -> ($newStateName)";
-        if (isset($this->transitions[$transitionName])) {
-            throw new BuilderTransitionAlreadyDeclaredException($oldStateName, $newStateName);
+        $transitionId = $transition->getId();
+        if (isset($this->transitions[$transitionId])) {
+            throw new BuilderTransitionAlreadyDeclaredException($transition);
         }
 
-        $this->transitions[$transitionName] = new Transition(
-            $this->states[$oldStateName],
-            $this->states[$newStateName],
-            $description
-        );
+        $this->transitions[$transitionId] = $transition;
 
         return $this;
+    }
+
+    public function defTransition(string $oldStateName, string $newStateName, ?string $description = null): self
+    {
+        return $this->addTransition(
+            new Transition(
+                $this->states[$oldStateName] ?? new State($oldStateName),
+                $this->states[$newStateName] ?? new State($newStateName),
+                $description
+            )
+        );
+    }
+
+    public function defDataTransition(string $oldStateName, array $data, string $newStateName, ?string $description = null): self
+    {
+        return $this->addTransition(
+            new TransitionWithData(
+                $this->states[$oldStateName] ?? new State($oldStateName),
+                $data,
+                $this->states[$newStateName] ?? new State($newStateName),
+                $description
+            )
+        );
     }
 
     /**
@@ -106,10 +132,19 @@ class Builder
 
     /**
      * @param EventDispatcherInterface|null $eventDispatcher
-     * @return Engine
+     * @return StateEngine
      */
     public function getEngine(?EventDispatcherInterface $eventDispatcher = null): EngineInterface
     {
-        return new Engine($this->getRepository(), $eventDispatcher);
+        return new StateEngine($this->getRepository(), $eventDispatcher);
+    }
+
+    /**
+     * @param EventDispatcherInterface|null $eventDispatcher
+     * @return StateMachine
+     */
+    public function getMachine(?EventDispatcherInterface $eventDispatcher = null): EngineInterface
+    {
+        return new StateMachine($this->getRepository(), $eventDispatcher);
     }
 }

@@ -1,32 +1,40 @@
 {
-    "name": "uuf6429/state-engine",
-    "type": "library",
-    "homepage": "https://github.com/uuf6429/state-engine-php",
-    "readme": "README.md",
-    "license": "MIT",
-    "description": "A library providing interfaces and basic implementation of a State Engine",
-    "keywords": ["state", "engine", "state-engine", "uuf6429"],
-    "authors": [
-        {
-            "name": "Christian Sciberras",
-            "email": "christian@sciberras.me"
-        }
-    ],
-    "require": {
-        "php": "^7.4 || ^8.0",
-        "psr/event-dispatcher": "^1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.5"
-    },
-    "autoload": {
-        "psr-4": {
-            "uuf6429\\StateEngine\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "uuf6429\\StateEngine\\": "test/"
-        }
+  "name": "uuf6429/state-engine",
+  "type": "library",
+  "homepage": "https://github.com/uuf6429/state-engine-php",
+  "readme": "README.md",
+  "license": "MIT",
+  "description": "A library providing interfaces and basic implementation of a State Engine or Machine",
+  "keywords": [
+    "state",
+    "engine",
+    "state-engine",
+    "machine",
+    "state-machine",
+    "workflow",
+    "uuf6429"
+  ],
+  "authors": [
+    {
+      "name": "Christian Sciberras",
+      "email": "christian@sciberras.me"
     }
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "psr/event-dispatcher": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "uuf6429\\StateEngine\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "uuf6429\\StateEngine\\": "tests/"
+    }
+  }
 }

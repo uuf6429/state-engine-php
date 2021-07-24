@@ -29,6 +29,16 @@ class State implements StateInterface, DescribableInterface
     public function equals($other): bool
     {
         return $other instanceof StateInterface
-            && $this->getName() === $other->getName();
+            && $this->getId() === $other->getId();
+    }
+
+    public function getId(): string
+    {
+        return $this->name;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getId();
     }
 }

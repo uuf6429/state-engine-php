@@ -2,7 +2,7 @@
 
 namespace uuf6429\StateEngine\Interfaces;
 
-interface TransitionInterface extends EquatableInterface
+interface TransitionInterface extends EquatableInterface, IdentifiableInterface
 {
     /**
      * Return the old state.
@@ -17,4 +17,6 @@ interface TransitionInterface extends EquatableInterface
      * @return StateInterface
      */
     public function getNewState(): StateInterface;
+
+    public function __toString(): string;
 }

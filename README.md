@@ -1,4 +1,4 @@
-# State Engine (PHP)
+# State Engine / Machine (PHP)
 
 [![CI](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml/badge.svg)](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.4%20%7C%20%5E8-8892BF.svg)](https://php.net/)
@@ -6,9 +6,14 @@
 [![Latest Stable Version](http://poser.pugx.org/uuf6429/state-engine/v)](https://packagist.org/packages/uuf6429/state-engine)
 [![Latest Unstable Version](http://poser.pugx.org/uuf6429/state-engine/v/unstable)](https://packagist.org/packages/uuf6429/state-engine)
 
-This library provides some interfaces and a basic implementation of a State Engine.
+This library provides some interfaces and a basic implementation of a State Engine or State Machine.
 
 **Highlights:**
+- Dual functionality:
+  1. Either as a basic state engine; switching to a desired state as long the transition is defined)
+     ([see "JiraIssueTest"](#jiraissuetest-state-engine))
+  2. Or a more sophisticated state machine; same as above but matching data for any state
+     ([see "TurnstileTest"](#turnstiletest-state-machine))
 - Highly composable - everything can be replaced as desired
 - [PSR-14](http://www.php-fig.org/psr/psr-14/) (Event Dispatcher) compatible
 - Fluent builder interface ([see "From Scratch"](#from-scratch))
@@ -19,7 +24,7 @@ This library provides some interfaces and a basic implementation of a State Engi
 The recommended and easiest way to install this library is through [Composer](https://getcomposer.org/):
 
 ```bash
-composer require uuf6429/state-engine-php "^1.0"
+composer require uuf6429/state-engine-php "^2.0"
 ```
 
 ## Why?
@@ -60,32 +65,26 @@ In this case, having the [`StateTraversion`](https://github.com/uuf6429/state-en
 Here's a quick & dirty example with the provided implementation (that assumes that there is a "door" model):
 
 ```php
-use App\Models\Door;  // example model
+use App\Models\Door;  // example model that implements StateAwareInterface
 
 use uuf6429\StateEngine\Implementation\Builder;
 use uuf6429\StateEngine\Implementation\Entities\State;
 
 $doorStateManager = Builder::create()
-    ->addState('open', 'Open')
-    ->addState('closed', 'Closed')
-    ->addState('locked', 'Locked')
-    ->addTransition('open', 'closed', 'Close the door')
-    ->addTransition('closed', 'locked', 'Lock the door')
-    ->addTransition('locked', 'closed', 'Unlock the door')
-    ->addTransition('closed', 'open', 'Open the door')
+    ->defState('open', 'Open')
+    ->defState('closed', 'Closed')
+    ->defState('locked', 'Locked')
+    ->defTransition('open', 'closed', 'Close the door')
+    ->defTransition('closed', 'locked', 'Lock the door')
+    ->defTransition('locked', 'closed', 'Unlock the door')
+    ->defTransition('closed', 'open', 'Open the door')
     ->getEngine(); // you can pass an event dispatcher to the engine here
 
 // find Door 123 (laravel-style repository-model)
 $door = Door::find(123);
 
-// build a state mutator (useful when the model does not have get/setState)
-$doorStateMutator = Builder::stateMutator(
-    static fn(): State => new State($door->status),                                    // getter
-    static fn(State $newState) => $door->update(['status' => $newState->getName()])    // setter
-);
-
 // close the door :)
-$doorStateManager->changeState($doorStateMutator, new State('closed'));
+$doorStateManager->changeState($door, new State('closed'));
 ```
 
 ### From Scratch (Custom)
@@ -100,6 +99,7 @@ For example, you could store states or transitions in a database, in which case 
 The library provides some flexibility so that you can connect your existing code with it. In more complicated scenarios,
 you may have to build a small layer to bridge the gap. The example below illustrates how one can handle models with
 flags instead of a single state.
+
 ```php
 use App\Models\Door;  // example model
 
@@ -108,7 +108,7 @@ use uuf6429\StateEngine\Implementation\Entities\State;
 
 $door = Door::find(123);
 
-$doorStateMutator = Builder::stateMutator(
+$doorStateMutator = Builder::makeStateMutator(
     static function () use ($door): State {             // getter
         if ($door->is_locked) {
             return new State('locked');
@@ -125,12 +125,45 @@ $doorStateMutator = Builder::stateMutator(
         ]);
     }
 );
+
+// assumes engine $doorStateManager was already defined
+$doorStateManager->changeState($doorStateMutator, new State('closed'));
 ```
 
 ## Examples & Testing
 
-The [`JiraIssueTest`](https://github.com/uuf6429/state-engine-php/blob/main/test/JiraIssueTest.php) class serves as a test as well as a realistic example of how Jira Issue states could be set up.
+### [`JiraIssueTest`](https://github.com/uuf6429/state-engine-php/blob/main/tests/JiraIssueTest.php) State Engine
+
+This test provides a realistic example of how Jira Issue states could be set up.
 
 The test also generates the PlantUML diagram below (embedded as an image due to GFM limitations):
 
-![example](https://www.planttext.com/api/plantuml/svg/TPBDRiCW48JlFCKUauDV88SgZgfAlLIrymGqJ2rK31PiBENjYurfux_hpZVB370EB3tVMoF4uI9lFyOrHogA5pgKLff7qE589xgWqPRaD5cIxvPUqG_ScmnSi8ygVJjF2ZsCwrfO5a_xHbCDgHuZDNcpJZVNTWQCbUNlr1FLuBktn8w-qb0i5wuwV02AMkSHOx7K9cnR_ikaqhCEMLmqgCg1lyAg8L5Lxe8r36J0nbNvfEmwfqnNTjqyqZn5hf0IfGQCmDes8i-tDrTbZAGDr1xtb3sodpA4WTtG9rzmfeTAZpKg8vsdwmTr7QmGvtY9yJV-0W00)
+![jira issue example](https://www.planttext.com/api/plantuml/svg/TPBDRiCW48JlFCKUauDV88SgZgfAlLIrymGqJ2rK31PiBENjYurfux_hpZVB370EB3tVMoF4uI9lFyOrHogA5pgKLff7qE589xgWqPRaD5cIxvPUqG_ScmnSi8ygVJjF2ZsCwrfO5a_xHbCDgHuZDNcpJZVNTWQCbUNlr1FLuBktn8w-qb0i5wuwV02AMkSHOx7K9cnR_ikaqhCEMLmqgCg1lyAg8L5Lxe8r36J0nbNvfEmwfqnNTjqyqZn5hf0IfGQCmDes8i-tDrTbZAGDr1xtb3sodpA4WTtG9rzmfeTAZpKg8vsdwmTr7QmGvtY9yJV-0W00)
+
+### [`TurnstileTest`](https://github.com/uuf6429/state-engine-php/blob/main/tests/JiraIssueTest.php) State Machine
+
+This test illustrates how a [state machine](https://en.wikipedia.org/wiki/Finite-state_machine) can be used to model a [turnstile gate](https://en.wikipedia.org/wiki/Turnstile).
+As before, here's the generated diagram:
+
+![turnstile example](https://www.planttext.com/api/plantuml/svg/SoWkIImgAStDuUBIyCmjI2mkJapAITLKqDMrKz08W7Ej59ppC_CK2d8IarDJk90amEgGDLef1AGM5UVdAPGdvcGNAvHa5EMNfcTmSJcavgM0h040)
+
+Here's how the state machine definition looks like and is used:
+```php
+use App\Models\Turnstile;  // example model that implements StateAwareInterface
+
+use uuf6429\StateEngine\Implementation\Builder;
+
+$turnstileStateMachine = Builder::create()
+    // make states
+    ->defState('locked', 'Impassable')
+    ->defState('open', 'Passable')
+    // make transitions
+    ->defDataTransition('locked', ['insert_coin'], 'open', 'Coin placed')
+    ->defDataTransition('open', ['walk_through'], 'locked', 'Person walks through')
+    ->getMachine();
+
+$turnstile = Turnstile::find(123);
+
+// put coin in turnstile (notice that the final state is not mentioned)
+$turnstileStateMachine->processInput($turnstile, ['insert_coin']);
+```

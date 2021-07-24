@@ -14,29 +14,29 @@ class BuilderTest extends TestCase
         parent::setUp();
 
         $this->builder = Builder::create()
-            ->addState('started')
-            ->addState('finished')
-            ->addTransition('started', 'finished');
+            ->defState('started')
+            ->defState('finished')
+            ->defTransition('started', 'finished');
     }
 
     public function test_that_states_cannot_be_redeclared(): void
     {
         $this->expectExceptionMessage('Cannot add state "started", it has already been declared.');
 
-        $this->builder->addState('started');
+        $this->builder->defState('started');
     }
 
     public function test_that_transitions_cannot_be_redeclared(): void
     {
-        $this->expectExceptionMessage('Cannot add transition from "started" to "finished", it has already been declared.');
+        $this->expectExceptionMessage('Cannot add transition "started -> finished", it has already been declared.');
 
-        $this->builder->addTransition('started', 'finished');
+        $this->builder->defTransition('started', 'finished');
     }
 
     public function test_that_states_must_be_declared_before_transitions(): void
     {
         $this->expectExceptionMessage('Cannot use state "progressing", since it has not been declared yet.');
 
-        $this->builder->addTransition('started', 'progressing');
+        $this->builder->defTransition('started', 'progressing');
     }
 }
