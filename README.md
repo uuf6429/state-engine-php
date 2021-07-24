@@ -24,7 +24,7 @@ This library provides some interfaces and a basic implementation of a State Engi
 The recommended and easiest way to install this library is through [Composer](https://getcomposer.org/):
 
 ```bash
-composer require uuf6429/state-engine-php "^1.0"
+composer require uuf6429/state-engine-php "^2.0"
 ```
 
 ## Why?
