@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.4', '8.0']
+        php: [ '7.4', '8.0' ]
 
     steps:
       - name: Set up PHP
@@ -31,4 +31,7 @@ jobs:
           composer-options: --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Run tests
-        run: ./vendor/bin/phpunit
+        run: ./vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: Upload to Codecov
+        run: bash <(curl -s https://codecov.io/bash)
