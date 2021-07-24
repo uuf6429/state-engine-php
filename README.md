@@ -11,9 +11,9 @@ This library provides some interfaces and a basic implementation of a State Engi
 **Highlights:**
 - Dual functionality:
   1. Either as a basic state engine; switching to a desired state as long the transition is defined)
-     ([see "JiraIssueTest"](#jiraissuetesthttpsgithubcomuuf6429state-engine-phpblobmaintestsjiraissuetestphp-state-engine))
+     ([see "JiraIssueTest"](#jiraissuetest-state-engine))
   2. Or a more sophisticated state machine; same as above but matching data for any state
-     ([see "TurnstileTest"](#turnstiletesthttpsgithubcomuuf6429state-engine-phpblobmaintestsjiraissuetestphp-state-machine))
+     ([see "TurnstileTest"](#turnstiletest-state-machine))
 - Highly composable - everything can be replaced as desired
 - [PSR-14](http://www.php-fig.org/psr/psr-14/) (Event Dispatcher) compatible
 - Fluent builder interface ([see "From Scratch"](#from-scratch))
