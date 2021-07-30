@@ -1,4 +1,4 @@
-# State Engine / Machine (PHP)
+# 🚦 State Engine / Machine (PHP)
 
 [![CI](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml/badge.svg)](https://github.com/uuf6429/state-engine-php/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/uuf6429/state-engine-php/branch/main/graph/badge.svg)](https://codecov.io/gh/uuf6429/state-engine-php)
@@ -9,7 +9,7 @@
 
 This library provides some interfaces and a basic implementation of a State Engine or State Machine.
 
-**Highlights:**
+✨ **Highlights:**
 - Dual functionality:
   1. Either as a basic state engine; switching to a desired state as long the transition is defined)
      ([see "JiraIssueTest"](#jiraissuetest-state-engine))
@@ -20,7 +20,7 @@ This library provides some interfaces and a basic implementation of a State Engi
 - Fluent builder interface ([see "From Scratch"](#from-scratch))
 - Generates PlantUML markup ([see "Examples & Testing"](#examples--testing))
 
-## Installation
+## 🔌 Installation
 
 The recommended and easiest way to install this library is through [Composer](https://getcomposer.org/):
 
@@ -28,7 +28,7 @@ The recommended and easiest way to install this library is through [Composer](ht
 composer require uuf6429/state-engine-php "^2.0"
 ```
 
-## Why?
+## 🧐 Why?
 
 In principle such an engine is easy to implement, but in practice it is typically implemented badly or forgotten.
 
@@ -37,7 +37,7 @@ For instance, one might have an `is_active` field thinking there will not be oth
 
 In any case, this library abstracts away that situation or at least decreases the amount of code.
 
-## How?
+## 🤔 How?
 
 There are a few key parts to how this works:
 
@@ -51,7 +51,7 @@ There are a few key parts to how this works:
 - **Engine** - an object that performs the transition of a model from one state to another. Usually you would have an
   engine instance for each stateful model in your application.
 
-## Usage
+## 🚀 Usage
 
 You have the possibility to use it from scratch or plug it into your existing. There are basically three parts to it:
 1. configuring the engine (creating states and transitions)
@@ -131,13 +131,15 @@ $doorStateMutator = Builder::makeStateMutator(
 $doorStateManager->changeState($doorStateMutator, new State('closed'));
 ```
 
-## Examples & Testing
+## 😎 Examples & Testing
+
+You can find some examples in this readme as well as [the tests](https://github.com/uuf6429/state-engine-php/tree/main/tests), some of which explained below.
 
 ### [`JiraIssueTest`](https://github.com/uuf6429/state-engine-php/blob/main/tests/JiraIssueTest.php) State Engine
 
 This test provides a realistic example of how Jira Issue states could be set up.
 
-The test also generates the PlantUML diagram below (embedded as an image due to GFM limitations):
+The test also generates the PlantUML diagram below (embedded as an image due to GFM limitations), thanks to the [Plantable trait](https://github.com/uuf6429/state-engine-php/blob/main/src/Implementation/Traits/Plantable.php):
 
 ![jira issue example](https://www.planttext.com/api/plantuml/svg/TPBDRiCW48JlFCKUauDV88SgZgfAlLIrymGqJ2rK31PiBENjYurfux_hpZVB370EB3tVMoF4uI9lFyOrHogA5pgKLff7qE589xgWqPRaD5cIxvPUqG_ScmnSi8ygVJjF2ZsCwrfO5a_xHbCDgHuZDNcpJZVNTWQCbUNlr1FLuBktn8w-qb0i5wuwV02AMkSHOx7K9cnR_ikaqhCEMLmqgCg1lyAg8L5Lxe8r36J0nbNvfEmwfqnNTjqyqZn5hf0IfGQCmDes8i-tDrTbZAGDr1xtb3sodpA4WTtG9rzmfeTAZpKg8vsdwmTr7QmGvtY9yJV-0W00)
 
@@ -167,4 +169,6 @@ $turnstile = Turnstile::find(123);
 
 // put coin in turnstile (notice that the final state is not mentioned)
 $turnstileStateMachine->processInput($turnstile, ['insert_coin']);
+
+// now $turnstile will be in "open" state
 ```
