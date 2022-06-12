@@ -5,7 +5,6 @@ namespace uuf6429\StateEngine\Implementation;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use uuf6429\StateEngine\Exceptions\TransitionNotDeclaredException;
 use uuf6429\StateEngine\Interfaces\EngineInterface;
-use uuf6429\StateEngine\Interfaces\StateInterface;
 use uuf6429\StateEngine\Interfaces\StateAwareInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
