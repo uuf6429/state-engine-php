@@ -11,11 +11,11 @@ class StateMachine extends AbstractEngine
      * A shortcut to avoid getting a transition.
      *
      * @param StateAwareInterface $item
-     * @param array $input
+     * @param array $inputData
      */
-    public function processInput(StateAwareInterface $item, array $input): void
+    public function processInput(StateAwareInterface $item, array $inputData): void
     {
-        $transition = new Entities\TransitionWithData($item->getState(), $input, new State(''));
+        $transition = new Entities\TransitionWithData($item->getState(), $inputData, new State(''));
         $this->execute($item, $transition);
     }
 }

@@ -25,7 +25,7 @@ This library provides some interfaces and a basic implementation of a State Engi
 The recommended and easiest way to install this library is through [Composer](https://getcomposer.org/):
 
 ```bash
-composer require uuf6429/state-engine-php "^2.0"
+composer require "uuf6429/state-engine-php" "^2.0"
 ```
 
 ## 🧐 Why?
@@ -119,7 +119,7 @@ $doorStateMutator = Builder::makeStateMutator(
             ? new State('open')
             : new State('closed');
     },
-    function (State $newState) use ($door): void {      // setter
+    static function (State $newState) use ($door): void {      // setter
         $door->update([
             'is_locked' => $newState->getName() === 'locked',
             'is_open' => $newState->getName() === 'open',

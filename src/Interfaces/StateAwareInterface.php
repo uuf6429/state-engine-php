@@ -9,7 +9,7 @@ interface StateAwareInterface
      *
      * @return StateInterface
      */
-    public function getState():StateInterface;
+    public function getState(): StateInterface;
 
     /**
      * Sets the new state.

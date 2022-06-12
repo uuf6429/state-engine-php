@@ -2,6 +2,7 @@
 
 namespace uuf6429\StateEngine\Implementation\Repositories;
 
+use Exception;
 use IteratorAggregate;
 use Traversable;
 use uuf6429\StateEngine\Implementation\Traits\FindsTransition;
@@ -12,6 +13,9 @@ abstract class AbstractTraversable implements TransitionRepositoryInterface, Ite
 {
     use FindsTransition, StateTraversion;
 
+    /**
+     * @throws Exception
+     */
     public function all(): Traversable
     {
         return $this->getIterator();

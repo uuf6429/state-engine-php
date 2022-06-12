@@ -2,9 +2,7 @@
 
 namespace uuf6429\StateEngine\Implementation\Entities;
 
-use uuf6429\StateEngine\Interfaces\DescribableInterface;
 use uuf6429\StateEngine\Interfaces\StateInterface;
-use uuf6429\StateEngine\Interfaces\TransitionInterface;
 
 class TransitionWithData extends Transition
 {
@@ -12,7 +10,7 @@ class TransitionWithData extends Transition
 
     public function __construct(StateInterface $oldState, array $data, StateInterface $newState, ?string $description = null)
     {
-        parent::__construct($oldState,$newState,$description);
+        parent::__construct($oldState, $newState, $description);
 
         $this->data = $data;
         ksort($this->data);

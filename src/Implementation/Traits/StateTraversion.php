@@ -2,6 +2,7 @@
 
 namespace uuf6429\StateEngine\Implementation\Traits;
 
+use Exception;
 use uuf6429\StateEngine\Interfaces\StateInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
@@ -12,6 +13,9 @@ use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
  */
 trait StateTraversion
 {
+    /**
+     * @throws Exception
+     */
     public function getForwardTransitions(StateInterface $state): array
     {
         /** @var $this TransitionRepositoryInterface */
@@ -23,6 +27,9 @@ trait StateTraversion
         ));
     }
 
+    /**
+     * @throws Exception
+     */
     public function getBackwardTransitions(StateInterface $state): array
     {
         /** @var $this TransitionRepositoryInterface */
