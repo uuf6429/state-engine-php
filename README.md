@@ -110,7 +110,8 @@ use uuf6429\StateEngine\Implementation\Entities\State;
 $door = Door::find(123);
 
 $doorStateMutator = Builder::makeStateMutator(
-    static function () use ($door): State {             // getter
+    // define how we get the state
+    static function () use ($door): State {
         if ($door->is_locked) {
             return new State('locked');
         }
@@ -119,7 +120,8 @@ $doorStateMutator = Builder::makeStateMutator(
             ? new State('open')
             : new State('closed');
     },
-    static function (State $newState) use ($door): void {      // setter
+    // define how we set the state
+    static function (State $newState) use ($door): void {
         $door->update([
             'is_locked' => $newState->getName() === 'locked',
             'is_open' => $newState->getName() === 'open',
