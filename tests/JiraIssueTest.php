@@ -81,10 +81,11 @@ class JiraIssueTest extends TestCase
 
     public function test_that_transitioning_from_in_dev_to_ready_for_qa_is_allowed(): void
     {
-        $this->expectNotToPerformAssertions();
-
         $item = new StatefulItem(new State('in-dev'));
+
         $this->engine->changeState($item, new State('ready-for-qa'));
+
+        $this->assertSame('ready-for-qa', $item->getState()->getName());
     }
 
     public function test_that_transitioning_from_in_dev_to_in_qa_is_not_allowed(): void
@@ -92,6 +93,7 @@ class JiraIssueTest extends TestCase
         $this->expectExceptionMessage('Cannot apply transition "in-dev -> in-qa"; no such transition was defined.');
 
         $item = new StatefulItem(new State('in-dev'));
+
         $this->engine->changeState($item, new State('in-qa'));
     }
 

@@ -50,15 +50,7 @@ class BuilderTest extends TestCase
 
     public function test_that_transitioning_with_mutator_works(): void
     {
-        $this->expectNotToPerformAssertions();
-
-        $engine = Builder::create()
-            ->defState('a')
-            ->defState('b')
-            ->defTransition('a', 'b')
-            ->getEngine();
-
-        $item = new StatefulItem(new State('a'));
+        $item = new StatefulItem(new State('started'));
         $mutator = Builder::makeStateMutator(
             static function () use ($item): State {
                 return $item->getState();
@@ -68,6 +60,8 @@ class BuilderTest extends TestCase
             }
         );
 
-        $engine->changeState($mutator, new State('b'));
+        $this->builder->getEngine()->changeState($mutator, new State('finished'));
+
+        $this->assertSame('finished', $item->getState()->getName());
     }
 }

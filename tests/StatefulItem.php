@@ -23,4 +23,9 @@ class StatefulItem implements StateAwareInterface
     {
         $this->state = $newState;
     }
+
+    public function __toString(): string
+    {
+        return 'StatefulItem';
+    }
 }

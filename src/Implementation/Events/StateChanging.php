@@ -28,4 +28,17 @@ class StateChanging
     {
         return $this->newState;
     }
+
+    public function __toString(): string
+    {
+        $item = $this->getItem();
+
+        return sprintf(
+            '%s[%s, %s->%s]',
+            __CLASS__,
+            method_exists($item, '__toString') ? $item : get_class($item),
+            $item->getState(),
+            $this->getNewState()
+        );
+    }
 }

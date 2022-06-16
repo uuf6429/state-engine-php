@@ -6,11 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use uuf6429\StateEngine\Implementation\Builder;
 use uuf6429\StateEngine\Implementation\Entities\State;
-use uuf6429\StateEngine\Implementation\Events\StateChanged;
-use uuf6429\StateEngine\Implementation\Events\StateChanging;
 use uuf6429\StateEngine\Interfaces\EngineInterface;
-use uuf6429\StateEngine\Interfaces\StateAwareInterface;
-use uuf6429\StateEngine\Interfaces\StateInterface;
 
 class EventTest extends TestCase
 {
@@ -32,7 +28,7 @@ class EventTest extends TestCase
             ->getEngine($this->dispatcher);
     }
 
-    public function test_that_engine_fires_exception(): void
+    public function test_that_engine_triggers_events(): void
     {
         $dispatchedEvents = [];
         $this->dispatcher
@@ -43,30 +39,16 @@ class EventTest extends TestCase
         $startedState = new State('started');
         $finishedState = new State('finished');
 
-        $statefulItem = new class implements StateAwareInterface {
-            public StateInterface $state;
-
-            public function getState(): StateInterface
-            {
-                return $this->state;
-            }
-
-            public function setState(StateInterface $newState): void
-            {
-                $this->state = $newState;
-            }
-        };
-
-        $statefulItem->state = $startedState;
+        $statefulItem = new StatefulItem($startedState);
         $this->engine->changeState($statefulItem, $finishedState);
 
-        $this->assertEquals($finishedState, $statefulItem->state);
+        $this->assertEquals($finishedState, $statefulItem->getState());
         $this->assertEquals(
             [
-                new StateChanging($statefulItem, $finishedState),
-                new StateChanged($statefulItem, $startedState),
+                'uuf6429\StateEngine\Implementation\Events\StateChanging[StatefulItem, finished->finished]',
+                'uuf6429\StateEngine\Implementation\Events\StateChanged[StatefulItem, started->finished]',
             ],
-            $dispatchedEvents
+            array_map('strval', $dispatchedEvents)
         );
     }
 }

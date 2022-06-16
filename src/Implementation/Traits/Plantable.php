@@ -14,26 +14,25 @@ trait Plantable
 {
     public function toPlantUML(): string
     {
+        $generateNodesAndEdges = static function (TransitionInterface $transition): string {
+            $oldText = ($oldState = $transition->getOldState()) instanceof DescribableInterface
+                ? $oldState->getDescription() : $oldState->getName();
+            $newText = ($newState = $transition->getNewState()) instanceof DescribableInterface
+                ? $newState->getDescription() : $newState->getName();
+
+            $result = "($oldText) --> ($newText)";
+
+            if ($transition instanceof DescribableInterface) {
+                $result .= " : {$transition->getDescription()}";
+            }
+
+            return $result;
+        };
+
         /** @var $this TransitionRepositoryInterface */
         return implode(PHP_EOL, array_merge(
             ['@startuml', ''],
-            array_map(
-                static function (TransitionInterface $transition): string {
-                    $oldState = $transition->getOldState();
-                    $newState = $transition->getNewState();
-                    $oldText = $oldState instanceof DescribableInterface ? $oldState->getDescription() : $oldState->getName();
-                    $newText = $newState instanceof DescribableInterface ? $newState->getDescription() : $newState->getName();
-
-                    $result = "($oldText) --> ($newText)";
-
-                    if ($transition instanceof DescribableInterface) {
-                        $result .= " : {$transition->getDescription()}";
-                    }
-
-                    return $result;
-                },
-                iterator_to_array($this)
-            ),
+            array_map($generateNodesAndEdges, iterator_to_array($this)),
             ['', '@enduml']
         ));
     }
