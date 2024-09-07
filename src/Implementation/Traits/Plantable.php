@@ -2,25 +2,23 @@
 
 namespace uuf6429\StateEngine\Implementation\Traits;
 
-use RuntimeException;
 use uuf6429\StateEngine\Interfaces\DescribableInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 
 /**
- * This trait provides a method for generating a Plant UML diagram of the various states and transitions.
- * It may only be added to a class implementing {@see TransitionRepositoryInterface}.
+ * This trait provides a method for generating a Plant UML diagram of the various states and transitions. You'd
+ * typically `use` this in a class implementing {@see TransitionRepositoryInterface}.
  */
 trait Plantable
 {
+    /**
+     * @return iterable<TransitionInterface>
+     */
+    abstract public function all(): iterable;
+
     public function toPlantUML(): string
     {
-        if (!$this instanceof TransitionRepositoryInterface) {
-            throw new RuntimeException(
-                sprintf('The `%s` trait may only be added to a class implementing `%s`', Plantable::class, TransitionInterface::class),
-            );
-        }
-
         /**
          * @return iterable<string>
          */

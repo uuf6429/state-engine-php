@@ -2,26 +2,24 @@
 
 namespace uuf6429\StateEngine\Implementation\Traits;
 
-use RuntimeException;
 use uuf6429\StateEngine\Interfaces\DescribableInterface;
 use uuf6429\StateEngine\Interfaces\StateInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 
 /**
- * This trait provides a method for generating a Mermaid State diagram of the various states and transitions.
- * It may only be added to a class implementing {@see TransitionRepositoryInterface}.
+ * This trait provides a method for generating a Mermaid State diagram of the various states and transitions. You'd
+ * typically `use` this in a class implementing {@see TransitionRepositoryInterface}.
  */
 trait Mermaidable
 {
+    /**
+     * @return iterable<TransitionInterface>
+     */
+    abstract public function all(): iterable;
+
     public function toMermaid(): string
     {
-        if (!$this instanceof TransitionRepositoryInterface) {
-            throw new RuntimeException(
-                sprintf('The `%s` trait may only be added to a class implementing `%s`', Mermaidable::class, TransitionInterface::class),
-            );
-        }
-
         /**
          * @return array<string, array{id: string, text: string}>
          */

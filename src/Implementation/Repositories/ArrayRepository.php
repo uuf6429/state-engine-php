@@ -8,7 +8,7 @@ use uuf6429\StateEngine\Interfaces\TransitionInterface;
 
 class ArrayRepository extends AbstractTraversable
 {
-    use Traits\StateTraversion;
+    use Traits\StateTraversal;
     use Traits\Plantable;
     use Traits\Mermaidable;
 
