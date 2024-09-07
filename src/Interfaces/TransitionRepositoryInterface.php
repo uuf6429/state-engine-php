@@ -2,8 +2,6 @@
 
 namespace uuf6429\StateEngine\Interfaces;
 
-use Traversable;
-
 interface TransitionRepositoryInterface
 {
     /**
@@ -17,7 +15,7 @@ interface TransitionRepositoryInterface
     /**
      * Returns an array or Traversable object of all transitions.
      *
-     * @return Traversable|TransitionInterface[]
+     * @return iterable<TransitionInterface>
      */
-    public function all(): Traversable;
+    public function all(): iterable;
 }

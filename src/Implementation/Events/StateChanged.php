@@ -36,9 +36,9 @@ class StateChanged
         return sprintf(
             '%s[%s, %s->%s]',
             __CLASS__,
-            method_exists($item, '__toString') ? $item : get_class($item),
+            method_exists($item, '__toString') ? $item->__toString() : get_class($item),
             $this->getOldState(),
-            $item->getState()
+            $item->getState(),
         );
     }
 }

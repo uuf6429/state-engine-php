@@ -6,8 +6,14 @@ use uuf6429\StateEngine\Interfaces\StateInterface;
 
 class TransitionWithData extends Transition
 {
+    /**
+     * @var array<int|string, mixed>
+     */
     private array $data;
 
+    /**
+     * @param array<int|string, mixed> $data
+     */
     public function __construct(StateInterface $oldState, array $data, StateInterface $newState, ?string $description = null)
     {
         parent::__construct($oldState, $newState, $description);
@@ -26,7 +32,7 @@ class TransitionWithData extends Transition
         return sprintf(
             '%s (%s)',
             $this->getOldState()->getId(),
-            serialize($this->data)
+            serialize($this->data),
         );
     }
 }
