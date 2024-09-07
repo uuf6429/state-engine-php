@@ -2,16 +2,20 @@
 
 namespace uuf6429\StateEngine;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use uuf6429\StateEngine\Implementation\Builder;
 use uuf6429\StateEngine\Implementation\Entities\State;
-use uuf6429\StateEngine\Interfaces\EngineInterface;
+use uuf6429\StateEngine\Implementation\StateEngine;
 
 class EventTest extends TestCase
 {
+    /**
+     * @var EventDispatcherInterface&MockObject
+     */
     private EventDispatcherInterface $dispatcher;
-    private EngineInterface $engine;
+    private StateEngine $engine;
 
     protected function setUp(): void
     {
@@ -48,7 +52,7 @@ class EventTest extends TestCase
                 'uuf6429\StateEngine\Implementation\Events\StateChanging[StatefulItem, finished->finished]',
                 'uuf6429\StateEngine\Implementation\Events\StateChanged[StatefulItem, started->finished]',
             ],
-            array_map('strval', $dispatchedEvents)
+            array_map('strval', $dispatchedEvents),
         );
     }
 }

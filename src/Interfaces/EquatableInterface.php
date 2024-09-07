@@ -7,8 +7,7 @@ interface EquatableInterface
     /**
      * Returns true if this object equals the $other object.
      *
-     * @param $other
-     * @return bool
+     * @param mixed $other
      */
     public function equals($other): bool;
 }

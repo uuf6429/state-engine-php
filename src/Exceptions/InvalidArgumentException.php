@@ -2,7 +2,4 @@
 
 namespace uuf6429\StateEngine\Exceptions;
 
-class InvalidArgumentException extends \InvalidArgumentException
-{
-
-}
+class InvalidArgumentException extends \InvalidArgumentException {}

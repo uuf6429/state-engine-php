@@ -2,7 +2,4 @@
 
 namespace uuf6429\StateEngine\Exceptions;
 
-class RuntimeException extends \RuntimeException
-{
-
-}
+class RuntimeException extends \RuntimeException {}

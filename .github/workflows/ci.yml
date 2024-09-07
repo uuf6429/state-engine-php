@@ -8,34 +8,37 @@ on:
 
 jobs:
 
-  build:
-    name: Test
+  Lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: [ '7.4', '8.0' ]
-
     steps:
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - run: composer update --ansi --no-progress --prefer-dist --no-interaction
+      - run: composer run lint
+
+  Test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ 'ubuntu-latest' ]
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3' ]
+        include:
+          - php: '8.3'
+            os: 'macos-latest'
+          - php: '8.3'
+            os: 'windows-latest'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug2
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Download dependencies
-        uses: ramsey/composer-install@v1
-        with:
-          composer-options: --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Run tests
-        run: ./vendor/bin/phpunit --coverage-clover coverage.xml
-
-      - name: Upload to Codecov
+          coverage: xdebug
+      - run: composer update --ansi --no-progress --prefer-dist --no-interaction
+      - run: composer run test:cover
+      - uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: bash <(curl -s https://codecov.io/bash)

@@ -49,14 +49,28 @@ class TurnstileGateTest extends TestCase
     {
         $this->assertEquals(
             [
-                0 => '@startuml',
-                1 => '',
-                2 => '(Impassable) --> (Passable) : Coin placed',
-                3 => '(Passable) --> (Impassable) : Person walks through',
-                4 => '',
-                5 => '@enduml',
+                '@startuml',
+                '',
+                '(Impassable) --> (Passable) : Coin placed',
+                '(Passable) --> (Impassable) : Person walks through',
+                '',
+                '@enduml',
             ],
-            explode(PHP_EOL, $this->repository->toPlantUML())
+            explode(PHP_EOL, $this->repository->toPlantUML()),
+        );
+    }
+
+    public function test_that_mermaid_generation_works(): void
+    {
+        $this->assertEquals(
+            [
+                'stateDiagram',
+                '    s1_locked: Impassable',
+                '    s2_open: Passable',
+                '    s1_locked --> s2_open : Coin placed',
+                '    s2_open --> s1_locked : Person walks through',
+            ],
+            explode(PHP_EOL, $this->repository->toMermaid()),
         );
     }
 }

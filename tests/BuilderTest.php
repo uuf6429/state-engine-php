@@ -5,6 +5,7 @@ namespace uuf6429\StateEngine;
 use PHPUnit\Framework\TestCase;
 use uuf6429\StateEngine\Implementation\Builder;
 use uuf6429\StateEngine\Implementation\Entities\State;
+use uuf6429\StateEngine\Interfaces\StateInterface;
 
 class BuilderTest extends TestCase
 {
@@ -52,12 +53,12 @@ class BuilderTest extends TestCase
     {
         $item = new StatefulItem(new State('started'));
         $mutator = Builder::makeStateMutator(
-            static function () use ($item): State {
+            static function () use ($item): StateInterface {
                 return $item->getState();
             },
             static function (State $newState) use ($item): void {
                 $item->setState($newState);
-            }
+            },
         );
 
         $this->builder->getEngine()->changeState($mutator, new State('finished'));

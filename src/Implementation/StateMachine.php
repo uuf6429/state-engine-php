@@ -10,8 +10,7 @@ class StateMachine extends AbstractEngine
     /**
      * A shortcut to avoid getting a transition.
      *
-     * @param StateAwareInterface $item
-     * @param array $inputData
+     * @param array<int|string, mixed> $inputData
      */
     public function processInput(StateAwareInterface $item, array $inputData): void
     {

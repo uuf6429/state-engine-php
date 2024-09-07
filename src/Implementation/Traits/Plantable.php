@@ -2,38 +2,50 @@
 
 namespace uuf6429\StateEngine\Implementation\Traits;
 
+use RuntimeException;
 use uuf6429\StateEngine\Interfaces\DescribableInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 
 /**
- * This trait provides a method for generating a Plant UML diagram of the various states and transitions, assuming the
- * current class is a {@see TransitionRepositoryInterface}.
+ * This trait provides a method for generating a Plant UML diagram of the various states and transitions.
+ * It may only be added to a class implementing {@see TransitionRepositoryInterface}.
  */
 trait Plantable
 {
     public function toPlantUML(): string
     {
-        $generateNodesAndEdges = static function (TransitionInterface $transition): string {
-            $oldText = ($oldState = $transition->getOldState()) instanceof DescribableInterface
-                ? $oldState->getDescription() : $oldState->getName();
-            $newText = ($newState = $transition->getNewState()) instanceof DescribableInterface
-                ? $newState->getDescription() : $newState->getName();
+        if (!$this instanceof TransitionRepositoryInterface) {
+            throw new RuntimeException(
+                sprintf('The `%s` trait may only be added to a class implementing `%s`', Plantable::class, TransitionInterface::class),
+            );
+        }
 
-            $result = "($oldText) --> ($newText)";
+        /**
+         * @return iterable<string>
+         */
+        $generateNodesAndEdges = static function (TransitionInterface ...$transitions): iterable {
+            foreach ($transitions as $transition) {
+                $oldStateText = ($oldState = $transition->getOldState()) instanceof DescribableInterface
+                    ? $oldState->getDescription() : $oldState->getName();
+                $newStateText = ($newState = $transition->getNewState()) instanceof DescribableInterface
+                    ? $newState->getDescription() : $newState->getName();
 
-            if ($transition instanceof DescribableInterface) {
-                $result .= " : {$transition->getDescription()}";
+                yield $transition instanceof DescribableInterface
+                    ? sprintf('(%s) --> (%s) : %s', $oldStateText, $newStateText, $transition->getDescription())
+                    : sprintf('(%s) --> (%s)', $oldStateText, $newStateText);
             }
-
-            return $result;
         };
 
-        /** @var $this TransitionRepositoryInterface */
-        return implode(PHP_EOL, array_merge(
-            ['@startuml', ''],
-            array_map($generateNodesAndEdges, iterator_to_array($this)),
-            ['', '@enduml']
-        ));
+        return implode(
+            PHP_EOL,
+            [
+                '@startuml',
+                '',
+                ...$generateNodesAndEdges(...$this->all()),
+                '',
+                '@enduml',
+            ],
+        );
     }
 }

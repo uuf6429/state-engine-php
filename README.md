@@ -10,22 +10,23 @@
 This library provides some interfaces and a basic implementation of a State Engine or State Machine.
 
 ✨ **Highlights:**
+
 - Dual functionality:
-  1. Either as a basic state engine; switching to a desired state as long the transition is defined)
-     ([see "JiraIssueTest"](#jiraissuetest-state-engine))
-  2. Or a more sophisticated state machine; same as above but matching data for any state
-     ([see "TurnstileTest"](#turnstiletest-state-machine))
+    1. Either as a basic state engine; switching to a desired state as long the transition is
+       defined ([see "JiraIssueTest"](#jiraissuetest-state-engine))
+    2. Or a more sophisticated state machine; same as above but matching data for any
+       state ([see "TurnstileTest"](#turnstiletest-state-machine))
 - Highly composable - everything can be replaced as desired
 - [PSR-14](http://www.php-fig.org/psr/psr-14/) (Event Dispatcher) compatible
 - Fluent builder interface ([see "From Scratch"](#from-scratch))
-- Generates PlantUML markup ([see "Examples & Testing"](#examples--testing))
+- Generates Mermaid or PlantUML markup ([see "Examples & Testing"](#-examples--testing))
 
 ## 🔌 Installation
 
 The recommended and easiest way to install this library is through [Composer](https://getcomposer.org/):
 
-```bash
-composer require "uuf6429/state-engine-php" "^2.0"
+```shell
+composer require "uuf6429/state-engine-php"
 ```
 
 ## 🧐 Why?
@@ -54,12 +55,15 @@ There are a few key parts to how this works:
 ## 🚀 Usage
 
 You have the possibility to use it from scratch or plug it into your existing. There are basically three parts to it:
+
 1. configuring the engine (creating states and transitions)
 2. using the engine (eg, in a web controller or service)
 3. (optionally) handling events (with the same event dispatcher provided to the engine)
 
 A slightly different situation would be when you need to provide a list of valid transitions, for example to the user.
-In this case, having the [`StateTraversion`](https://github.com/uuf6429/state-engine-php/blob/main/src/Implementation/Traits/StateTraversion.php) trait on the repository would be useful.
+In this case, having the [
+`StateTraversion`](https://github.com/uuf6429/state-engine-php/blob/main/src/Implementation/Traits/StateTraversion.php)
+trait on the repository would be useful.
 
 ### From Scratch
 
@@ -135,24 +139,58 @@ $doorStateManager->changeState($doorStateMutator, new State('closed'));
 
 ## 😎 Examples & Testing
 
-You can find some examples in this readme as well as [the tests](https://github.com/uuf6429/state-engine-php/tree/main/tests), some of which explained below.
+You can find some examples in this readme as well
+as [the tests](https://github.com/uuf6429/state-engine-php/tree/main/tests), some of which are explained below.
 
 ### [`JiraIssueTest`](https://github.com/uuf6429/state-engine-php/blob/main/tests/JiraIssueTest.php) State Engine
 
 This test provides a realistic example of how Jira Issue states could be set up.
 
-The test also generates the PlantUML diagram below (embedded as an image due to GFM limitations), thanks to the [Plantable trait](https://github.com/uuf6429/state-engine-php/blob/main/src/Implementation/Traits/Plantable.php):
+The test also generates the Mermaid diagram below, thanks to
+the [Mermaidable trait](https://github.com/uuf6429/state-engine-php/blob/main/src/Implementation/Traits/Mermaidable.php):
 
-![jira issue example](https://www.planttext.com/api/plantuml/svg/TPBDRiCW48JlFCKUauDV88SgZgfAlLIrymGqJ2rK31PiBENjYurfux_hpZVB370EB3tVMoF4uI9lFyOrHogA5pgKLff7qE589xgWqPRaD5cIxvPUqG_ScmnSi8ygVJjF2ZsCwrfO5a_xHbCDgHuZDNcpJZVNTWQCbUNlr1FLuBktn8w-qb0i5wuwV02AMkSHOx7K9cnR_ikaqhCEMLmqgCg1lyAg8L5Lxe8r36J0nbNvfEmwfqnNTjqyqZn5hf0IfGQCmDes8i-tDrTbZAGDr1xtb3sodpA4WTtG9rzmfeTAZpKg8vsdwmTr7QmGvtY9yJV-0W00)
+```mermaid
+stateDiagram
+    s1_backlog: Backlog
+    s2_analysis: Analysis
+    s3_in_dev: In Dev
+    s4_ready_for_dev: Ready for Dev
+    s5_ready_for_qa: Ready for QA
+    s6_ready_for_release: Ready for Release
+    s7_in_qa: In QA
+    s8_resolved: Resolved
+    s1_backlog --> s2_analysis: Begin analysis
+    s1_backlog --> s3_in_dev: Fast-track for development
+    s2_analysis --> s4_ready_for_dev: Analysis complete
+    s2_analysis --> s1_backlog: Return to backlog
+    s4_ready_for_dev --> s2_analysis: Need more details
+    s4_ready_for_dev --> s3_in_dev: Begin development
+    s3_in_dev --> s5_ready_for_qa: Send to QA
+    s3_in_dev --> s6_ready_for_release: Fast-track for release
+    s3_in_dev --> s4_ready_for_dev: Stop development
+    s5_ready_for_qa --> s7_in_qa: Begin testing
+    s7_in_qa --> s4_ready_for_dev: QA Failed
+    s7_in_qa --> s6_ready_for_release: QA Passed
+    s6_ready_for_release --> s8_resolved: Released
+    s8_resolved --> s1_backlog: Reopen
+```
 
 ### [`TurnstileTest`](https://github.com/uuf6429/state-engine-php/blob/main/tests/JiraIssueTest.php) State Machine
 
-This test illustrates how a [state machine](https://en.wikipedia.org/wiki/Finite-state_machine) can be used to model a [turnstile gate](https://en.wikipedia.org/wiki/Turnstile).
+This test illustrates how a [state machine](https://en.wikipedia.org/wiki/Finite-state_machine) can be used to model
+a [turnstile gate](https://en.wikipedia.org/wiki/Turnstile).
 As before, here's the generated diagram:
 
-![turnstile example](https://www.planttext.com/api/plantuml/svg/SoWkIImgAStDuUBIyCmjI2mkJapAITLKqDMrKz08W7Ej59ppC_CK2d8IarDJk90amEgGDLef1AGM5UVdAPGdvcGNAvHa5EMNfcTmSJcavgM0h040)
+```mermaid
+stateDiagram
+    s1_locked: Impassable
+    s2_open: Passable
+    s1_locked --> s2_open: Coin placed
+    s2_open --> s1_locked: Person walks through
+```
 
-Here's how the state machine definition looks like and is used:
+Here's how the state machine definition looks like and how it could be used:
+
 ```php
 use App\Models\Turnstile;  // example model that implements StateAwareInterface
 

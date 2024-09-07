@@ -28,10 +28,7 @@ class Builder
      */
     protected array $transitions = [];
 
-    private function __construct()
-    {
-
-    }
+    final private function __construct() {}
 
     public static function create(): self
     {
@@ -41,9 +38,19 @@ class Builder
     public static function makeStateMutator(callable $getter, callable $setter): StateAwareInterface
     {
         return new class ($getter, $setter) implements StateAwareInterface {
+            /**
+             * @var callable(): StateInterface
+             */
             private $getter;
+            /**
+             * @var callable(StateInterface): void
+             */
             private $setter;
 
+            /**
+             * @param callable(): StateInterface $getter
+             * @param callable(StateInterface): void $setter
+             */
             public function __construct(callable $getter, callable $setter)
             {
                 $this->getter = $getter;
@@ -105,11 +112,14 @@ class Builder
             new Transition(
                 $this->states[$oldStateName] ?? new State($oldStateName),
                 $this->states[$newStateName] ?? new State($newStateName),
-                $description
-            )
+                $description,
+            ),
         );
     }
 
+    /**
+     * @param array<int|string, mixed> $data
+     */
     public function defDataTransition(string $oldStateName, array $data, string $newStateName, ?string $description = null): self
     {
         return $this->addTransition(
@@ -117,8 +127,8 @@ class Builder
                 $this->states[$oldStateName] ?? new State($oldStateName),
                 $data,
                 $this->states[$newStateName] ?? new State($newStateName),
-                $description
-            )
+                $description,
+            ),
         );
     }
 

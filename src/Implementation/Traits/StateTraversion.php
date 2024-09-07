@@ -3,6 +3,7 @@
 namespace uuf6429\StateEngine\Implementation\Traits;
 
 use Exception;
+use RuntimeException;
 use uuf6429\StateEngine\Interfaces\StateInterface;
 use uuf6429\StateEngine\Interfaces\TransitionInterface;
 use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
@@ -14,30 +15,42 @@ use uuf6429\StateEngine\Interfaces\TransitionRepositoryInterface;
 trait StateTraversion
 {
     /**
+     * @return list<TransitionInterface>
      * @throws Exception
      */
     public function getForwardTransitions(StateInterface $state): array
     {
-        /** @var $this TransitionRepositoryInterface */
+        if (!$this instanceof TransitionRepositoryInterface) {
+            throw new RuntimeException(
+                sprintf('The `%s` trait may only be added to a class implementing `%s`', Plantable::class, TransitionInterface::class),
+            );
+        }
+
         return array_values(array_filter(
             iterator_to_array($this->all()),
             static function (TransitionInterface $transition) use ($state): bool {
                 return $transition->getOldState()->equals($state);
-            }
+            },
         ));
     }
 
     /**
+     * @return list<TransitionInterface>
      * @throws Exception
      */
     public function getBackwardTransitions(StateInterface $state): array
     {
-        /** @var $this TransitionRepositoryInterface */
+        if (!$this instanceof TransitionRepositoryInterface) {
+            throw new RuntimeException(
+                sprintf('The `%s` trait may only be added to a class implementing `%s`', Plantable::class, TransitionInterface::class),
+            );
+        }
+
         return array_values(array_filter(
             iterator_to_array($this->all()),
             static function (TransitionInterface $transition) use ($state): bool {
                 return $transition->getNewState()->equals($state);
-            }
+            },
         ));
     }
 }
