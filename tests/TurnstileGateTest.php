@@ -45,7 +45,7 @@ class TurnstileGateTest extends TestCase
         $this->assertSame('open', $item->getState()->getName());
     }
 
-    public function test_that_plant_uml_generation_works(): void
+    public function test_that_turnstile_plant_uml_generation_works(): void
     {
         $this->assertEquals(
             [
@@ -60,7 +60,7 @@ class TurnstileGateTest extends TestCase
         );
     }
 
-    public function test_that_mermaid_generation_works(): void
+    public function test_that_turnstile_mermaid_generation_works(): void
     {
         $this->assertEquals(
             [

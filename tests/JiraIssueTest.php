@@ -97,7 +97,7 @@ class JiraIssueTest extends TestCase
         $this->engine->changeState($item, new State('in-qa'));
     }
 
-    public function test_that_plant_uml_generation_works(): void
+    public function test_that_jira_issues_plant_uml_generation_works(): void
     {
         $this->assertEquals(
             [
@@ -124,7 +124,7 @@ class JiraIssueTest extends TestCase
         );
     }
 
-    public function test_that_mermaid_generation_works(): void
+    public function test_that_jira_issues_mermaid_generation_works(): void
     {
         $this->assertEquals(
             [
